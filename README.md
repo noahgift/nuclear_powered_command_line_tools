@@ -1,2 +1,3 @@
-# nuclear_powered_command_line_tools
-Nuclear Powered Command-Line Tools
+# Nuclear Powered Command-Line Tools
+
+Examples of extremely powerful, small command-line tools.
