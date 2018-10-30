@@ -69,7 +69,11 @@ def kmeans_cluster_housing(clusters=3):
     numerical_df =\
         val_housing_win_df.loc[:,["TOTAL_ATTENDANCE_MILLIONS", "ELO", 
         "VALUE_MILLIONS", "MEDIAN_HOME_PRICE_COUNTY_MILLIONS"]]
+    #scale data
     scaler = MinMaxScaler()
+    scaler.fit(numerical_df)
+    scaler.transform(numerical_df)
+    #cluster data
     k_means = KMeans(n_clusters=clusters)
     kmeans = k_means.fit(scaler.transform(numerical_df))
     val_housing_win_df['cluster'] = kmeans.labels_
@@ -94,6 +98,41 @@ def expmean_jit(rea):
 def add_ufunc(x, y):
     return x + y
 
+
+@timing
+@numba.jit(parallel=True)
+def add_sum_threaded(rea):
+    """Use all the cores"""
+
+    x,_ = rea.shape
+    total = 0
+    for _ in numba.prange(x):
+        total += rea.sum()  
+        print(total)
+
+@timing
+def add_sum(rea):
+    """traditional for loop"""
+
+    x,_ = rea.shape
+    total = 0
+    for _ in numba.prange(x):
+        total += rea.sum()  
+        print(total)
+
+@cli.command()
+@click.option('--threads/--no-jit', default=False)
+def thread_test(threads):
+    rea = real_estate_array()
+    if threads:
+        click.echo(click.style('Running with multicore threads', fg='green'))
+        add_sum_threaded(rea)
+    else:
+        click.echo(click.style('Running NO THREADS', fg='red'))
+        add_sum(rea)
+
+
+
 @cli.command()
 def cuda_operation():
     """Performs Vectorized Operations on GPU"""
@@ -116,6 +155,7 @@ def cuda_operation():
     out_host = out_device.copy_to_host()
     print(f"Calculcations from GPU {out_host}")
 
+
 @cli.command()
 @click.option('--jit/--no-jit', default=False)
 def jit_test(jit):
@@ -127,7 +167,12 @@ def jit_test(jit):
         click.echo(click.style('Running NO JIT', fg='red'))
         expmean(rea)
 
-
+@cli.command()
+@click.option("--num", default=3, help="number of clusters")
+def cluster(num):
+    df = kmeans_cluster_housing(clusters=num)
+    click.echo("Clustered DataFrame")
+    click.echo(df.head())
 
 
 if __name__ == "__main__":
