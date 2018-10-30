@@ -6,9 +6,9 @@ Examples of extremely powerful, small command-line tools.
 
 Techniques used:
 
-* GPU
-* JIT
-* Machine Learning (Kmeans Clustering)
-* True Multi-Threaded (no GIL) Parallelization
-* Colored output from Click
-* Timing decorators
+* [GPU (Using CUDA)](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L136)
+* [JIT](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L159)
+* [Machine Learning (Kmeans Clustering)](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L170)
+* [True Multi-Threaded (no GIL) Parallelization](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L123)
+* [Colored output from Click](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L164)
+* [Timing decorators](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L29)
