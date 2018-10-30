@@ -13,5 +13,7 @@ Techniques used:
 * [Colored output from Click](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L164)
 * [Timing decorators](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/nuclearcli.py#L29)
 * [GPU Mandelbrot](https://github.com/noahgift/nuclear_powered_command_line_tools/blob/master/notebooks/numba-cuda.ipynb)
+
+
 ![mandelbrot](https://user-images.githubusercontent.com/58792/47740395-f31d6480-dc34-11e8-9695-756bdb68d3ab.png)
 
