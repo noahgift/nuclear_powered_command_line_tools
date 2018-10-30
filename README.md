@@ -11,3 +11,4 @@ Techniques used:
 * Machine Learning (Kmeans Clustering)
 * True Multi-Threaded (no GIL) Parallelization
 * Colored output from Click
+* Timing decorators
