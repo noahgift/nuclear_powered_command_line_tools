@@ -153,7 +153,7 @@ def cuda_operation():
     add_ufunc(x_device,y_device, out=out_device)
 
     out_host = out_device.copy_to_host()
-    print(f"Calculcations from GPU {out_host}")
+    print(f"Calculations from GPU {out_host}")
 
 
 @cli.command()
