@@ -1,10 +1,23 @@
+"""
+Nuclear Powered Cli
+
+* GPU parallization
+* Machine Learning/Clustering
+* JIT
+* Multi-threading
+* Colored output
+
+"""
+
+
 import click
 
-from numba import (cuda, jit, vectorize)
+from numba import (cuda, vectorize)
 import numba
-import math
 import pandas as pd
 import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.cluster import KMeans
 
 from functools import wraps
 from time import time
@@ -19,8 +32,7 @@ def timing(f):
         ts = time()
         result = f(*args, **kw)
         te = time()
-        print('func:%r args:[%r, %r] took: %2.4f sec' % \
-          (f.__name__, args, kw, te-ts))
+        print(f"fun: {f.__name__}, args: [{args}, {kw}] took: {te-ts} sec")
         return result
     return wrap
 
@@ -49,6 +61,20 @@ def real_estate_array():
     rea = numerical_real_estate_array(df)
     return np.float32(rea)
 
+def kmeans_cluster_housing(clusters=3):
+    """Kmeans cluster a dataframe"""
+    
+    val_housing_win_df =\
+        pd.read_csv("https://raw.githubusercontent.com/noahgift/socialpowernba/master/data/nba_2017_att_val_elo_win_housing.csv")
+    numerical_df =\
+        val_housing_win_df.loc[:,["TOTAL_ATTENDANCE_MILLIONS", "ELO", 
+        "VALUE_MILLIONS", "MEDIAN_HOME_PRICE_COUNTY_MILLIONS"]]
+    scaler = MinMaxScaler()
+    k_means = KMeans(n_clusters=clusters)
+    kmeans = k_means.fit(scaler.transform(numerical_df))
+    val_housing_win_df['cluster'] = kmeans.labels_
+    return val_housing_win_df
+
 @timing
 def expmean(rea):
     """Regular Function"""
@@ -57,8 +83,8 @@ def expmean(rea):
     return val
 
 @timing
-@jit(nopython=True)
-def expmean_jit(rea, num=1000):
+@numba.jit(nopython=True)
+def expmean_jit(rea):
     """Perform multiple mean calculations"""
 
     val = rea.mean() ** 2
@@ -67,7 +93,6 @@ def expmean_jit(rea, num=1000):
 @vectorize(['float32(float32, float32)'], target='cuda')
 def add_ufunc(x, y):
     return x + y
-
 
 @cli.command()
 def cuda_operation():
@@ -79,7 +104,8 @@ def cuda_operation():
     print("Moving calculations to GPU memory")
     x_device = cuda.to_device(x)
     y_device = cuda.to_device(y)
-    out_device = cuda.device_array(shape=(x.shape[0],x.shape[1]), dtype=np.float32)
+    out_device = cuda.device_array(
+        shape=(x_device.shape[0],x_device.shape[1]), dtype=np.float32)
     print(x_device)
     print(x_device.shape)
     print(x_device.dtype)
@@ -100,6 +126,9 @@ def jit_test(jit):
     else:
         click.echo(click.style('Running NO JIT', fg='red'))
         expmean(rea)
+
+
+
 
 if __name__ == "__main__":
     cli()
