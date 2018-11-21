@@ -16,7 +16,7 @@ Techniques used:
 
 
 ## Read article
-[Turbocharging Python with Command Line Tools]https://kite.com/blog/python/python-command-line-tools
+[Turbocharging Python with Command Line Tools](https://kite.com/blog/python/python-command-line-tools)
 
 ![mandelbrot](https://user-images.githubusercontent.com/58792/47740395-f31d6480-dc34-11e8-9695-756bdb68d3ab.png)
 
